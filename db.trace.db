@@ -328,3 +328,7 @@ Caused by: java.nio.channels.OverlappingFileLockException
 	at java.base/java.nio.channels.FileChannel.tryLock(FileChannel.java:1165)
 	at org.h2.mvstore.FileStore.open(FileStore.java:163)
 	... 29 more
+2021-10-05 13:50:27 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Błąd składniowy w wyrażeniu SQL "SELECT * FROM ROLE ROLE USER[*] USER USER_ROLES_SET"
+Syntax error in SQL statement "SELECT * FROM ROLE ROLE USER[*] USER USER_ROLES_SET"; SQL statement:
+SELECT * FROM ROLE ROLE USER USER USER_ROLES_SET [42000-200]

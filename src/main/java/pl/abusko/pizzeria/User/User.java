@@ -4,15 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import pl.abusko.pizzeria.role.Role;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -28,12 +26,13 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
     private Integer phoneNumber;
-    private String role;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    private Set<Role> rolesSet = new HashSet<>();
 
 
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(role));
+        return rolesSet;
     }
 
     @Override

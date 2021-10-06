@@ -3,6 +3,11 @@ package pl.abusko.pizzeria.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import pl.abusko.pizzeria.role.Role;
+
+import java.util.Collections;
+import java.util.Set;
 
 
 @Data
@@ -23,7 +28,7 @@ public class UserRegDto {
         user.setFirstName(this.getFirstName());
         user.setLastName(this.getLastName());
         user.setPhoneNumber(this.getPhoneNumber());
-        user.setRole("ROLE_USER");
+
         return user;
     }
 

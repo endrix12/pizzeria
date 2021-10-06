@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Controller
@@ -16,13 +16,13 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
-    @GetMapping("/register")
+    @GetMapping("register")
     public String register(Model model){
         model.addAttribute("newUserDto", new UserRegDto());
         return "register";
     }
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public String registerUser(@ModelAttribute UserRegDto userRegDto){
 
         userRegDto.setPassword(passwordEncoder.encode(userRegDto.getPassword()));
@@ -30,9 +30,17 @@ public class UserController {
         return "create";
     }
 
-    @GetMapping("/admin")
-    public String adminPanel(){
+    @GetMapping("admin")
+    public String adminPanel(Model model){
+        List<User> usersList = userService.getUsers();
+        model.addAttribute("usersList",usersList);
         return "admin-panel";
+    }
+
+    @DeleteMapping("delete/{id}")
+    public String deleteUser(@PathVariable(name="id") Long id){
+        userService.deleteUserById(id);
+        return "redirect:/admin";
     }
 
 

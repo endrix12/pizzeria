@@ -1,11 +1,40 @@
 <!DOCTYPE html>
-<html lang="en", xmlns:th="http://www.thymeleaf.org">
+<html lang="en" , xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Panel admina</title>
 </head>
 <body>
 <h1>Lista użytkowników</h1>
+
+<div>
+    <table border="1" cellpadding="10">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>email</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Numer telefonu</th>
+            <th>Action</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${usersList}">
+            <td th:text=" ${user.id}">Id</td>
+            <td th:text="${user.email}">email</td>
+            <td th:text="${user.firstName}">Imię</td>
+            <td th:text="${user.lastName}">Nazwisko</td>
+            <td th:text="${user.phoneNumber}">Numer telefonu</td>
+            <td>
+                <a th:href="@{'/delete/' + ${user.id}}">usuń</a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
