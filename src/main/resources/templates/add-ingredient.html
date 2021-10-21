@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en", xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodaj nowy składnik pizzy</title>
+</head>
+<body>
+<h1 th:if="${ingredientDto.id == null}">Dodawanie składnika pizzy</h1>
+<h1 th:unless="${ingredientDto.id == null}">Edycja składnika pizzy</h1>
+<div>
+    <form th:action="@{/ingredient/add}" method="post"  th:object="${ingredientDto}" >
+        <input id="id" type="hidden" th:field="*{id}"/>
+        <label for="name">Wpisz nazwę składnika</label></br>
+        <input id="name" name="name" type="text" th:field="*{name}"/>&nbsp&nbsp<span style="color: red" th:if="${ingredientExists}" >Podany składnik już jest w bazie danych</span></br>
+        <input th:if="${ingredientDto.id==null}" type="submit" value="Dodaj"/>
+        <input th:unless="${ingredientDto.id==null}" type="submit" value="Zapisz zmiany"/>
+    </form>
+</div>
+</body>
+</html>

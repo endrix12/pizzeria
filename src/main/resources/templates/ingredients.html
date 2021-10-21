@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" , xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista składników pizzy</title>
+</head>
+<body>
+<h1>Lista składników pizzy</h1>
+
+<div>
+    <table border="1" cellpadding="10">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>nazwa</th>
+            <th>Akcja</th>
+        </tr>
+        </thead>
+        <tbody>
+        <a th:href="@{'/ingredient/add'}">Dodaj Składnik</a>
+        <tr th:each="ingredient : ${ingredientList}">
+            <td th:text=" ${ingredient.id}">Id</td>
+            <td th:text="${ingredient.name}">name</td>
+            <td>
+                <a th:href="@{'/ingredient/delete/' + ${ingredient.id}}" >usuń</a>
+                <a th:href="@{'/ingredient/update/' + ${ingredient.id}}" >edytuj</a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

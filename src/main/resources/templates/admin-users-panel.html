@@ -28,7 +28,8 @@
             <td th:text="${user.lastName}">Nazwisko</td>
             <td th:text="${user.phoneNumber}">Numer telefonu</td>
             <td>
-                <a th:href="@{'/delete/' + ${user.id}}">usuń</a>
+                <a th:href="@{'/delete/' + ${user.id}}" >usuń</a>
+                <a th:href="@{'/update/' + ${user.id}}" >edytuj</a>
 
             </td>
         </tr>

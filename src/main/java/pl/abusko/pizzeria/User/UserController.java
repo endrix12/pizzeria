@@ -35,7 +35,7 @@ public class UserController {
          else{
             userRegDto.setPassword(passwordEncoder.encode(userRegDto.getPassword()));
             userService.add(userRegDto.toUserEntity());
-            return "create";
+            return "create-user";
         }
     }
 
@@ -43,7 +43,7 @@ public class UserController {
     public String adminPanel(Model model){
         List<User> usersList = userService.getUsers();
         model.addAttribute("usersList",usersList);
-        return "admin-panel";
+        return "admin-users-panel";
     }
 
     @GetMapping("delete/{id}")

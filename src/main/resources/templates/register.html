@@ -5,20 +5,23 @@
     <title>Rejestracja</title>
 </head>
 <body>
-<h1>Rejestracja użytkownika</h1>
+<h1 th:if="${newUserDto.id == null}">Rejestracja użytkownika</h1>
+<h1 th:unless="${newUserDto.id == null}">Edycja użytkownika</h1>
 <div>
     <form th:action="@{/register}" method="post"  th:object="${newUserDto}" >
+        <input id="id" type="hidden" th:field="*{id}"/>
         <label for="email">Podaj email</label></br>
-        <input id="email" name="email" type="email" th:field="*{email}"></br>
+        <input id="email" name="email" type="email" th:field="*{email}"/>&nbsp&nbsp<span style="color: red" th:if="${userExists}" >Podany email jest zajęty</span></br>
         <label for="password">Ustal hasło</label></br>
-        <input id="password" name="password" type="password" th:field="*{password}"></br>
+        <input id="password" name="password" type="password" th:field="*{password}"/></br>
         <label for="firstName">Podaj imię</label></br>
-        <input id="firstName" name="firstName" type="text" th:field="*{firstName}"></br>
+        <input id="firstName" name="firstName" type="text" th:field="*{firstName}"/></br>
         <label for="lastName">Podaj nazwisko</label></br>
-        <input id="lastName" name="lastName" type="text" th:field="*{lastName}"> </br>
+        <input id="lastName" name="lastName" type="text" th:field="*{lastName}"/> </br>
         <label for="phone">Podaj numer telefonu</label></br>
-        <input id="phone" name="phone" type="tel" th:field="*{phoneNumber}"></br>
-        <input type="submit" value="Zarejestruj">
+        <input id="phone" name="phone" type="tel" th:field="*{phoneNumber}"/></br>
+        <input th:if="${newUserDto.id==null}" type="submit" value="Zarejestruj"/>
+        <input th:unless="${newUserDto.id==null}" type="submit" value="Zapisz zmiany"/>
     </form>
 </div>
 </body>

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import pl.abusko.pizzeria.role.Role;
+import pl.abusko.pizzeria.Role.Role;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -21,18 +21,32 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String email;
     private String password;
     private String firstName;
     private String lastName;
     private Integer phoneNumber;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER )
-    private Set<Role> rolesSet = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER )
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
+    public User(String email, String password, String firstName, String lastName, Integer phoneNumber) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+    }
 
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return rolesSet;
+        return roles;
     }
 
     @Override
@@ -58,5 +72,23 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void addRole(Role role){
+        this.roles.add(role);
+    }
+
+    public UserRegDto toDto(){
+
+
+        UserRegDto userRegDto = new UserRegDto();
+        userRegDto.setId(this.id);
+        userRegDto.setEmail(this.getEmail());
+        userRegDto.setPassword("");
+        userRegDto.setFirstName(this.getFirstName());
+        userRegDto.setLastName(this.getLastName());
+        userRegDto.setPhoneNumber(this.getPhoneNumber());
+
+        return userRegDto;
     }
 }

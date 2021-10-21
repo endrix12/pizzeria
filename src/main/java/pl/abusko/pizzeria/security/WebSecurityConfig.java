@@ -12,11 +12,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
+import pl.abusko.pizzeria.ingredient.Ingredient;
+import pl.abusko.pizzeria.Product.Pizza;
+import pl.abusko.pizzeria.Product.PizzaRepository;
+import pl.abusko.pizzeria.Role.Role;
+import pl.abusko.pizzeria.Role.RoleRepository;
 import pl.abusko.pizzeria.User.User;
 import pl.abusko.pizzeria.User.UserDetailServiceImpl;
 import pl.abusko.pizzeria.User.UserService;
-import pl.abusko.pizzeria.role.Role;
-import java.util.HashSet;
 
 
 @Configuration
@@ -26,11 +30,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     UserDetailServiceImpl userDetailsService;
     UserService userService;
+    RoleRepository roleRepository;
+    PizzaRepository pizzaRepository;
 
     @Autowired
-    public WebSecurityConfig(UserDetailServiceImpl userDetailsService, UserService userService) {
+    public WebSecurityConfig(UserDetailServiceImpl userDetailsService, UserService userService, RoleRepository roleRepository, PizzaRepository pizzaRepository) {
         this.userService = userService;
         this.userDetailsService = userDetailsService;
+        this.roleRepository = roleRepository;
+        this.pizzaRepository = pizzaRepository;
 
     }
 
@@ -56,18 +64,39 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
         http.csrf().disable();
 
+
     }
 
 
     @EventListener(ApplicationReadyEvent.class)
+    @Transactional
     public void addAdmin() {
+        Role adminRole = new Role("ROLE_ADMIN");
+        Role userRole = new Role("ROLE_USER");
 
-        User admin = new User(1L, "andrzejbusko610@gmail.com", passwordEncoder().encode("haneczka"), "Andrzej", "Buśko", 603787609, new HashSet<>());
-        admin.getRolesSet().add(new Role(1,"ROLE_ADMIN"));
-        User user = new User(2L, "busko610@gmail.com", passwordEncoder().encode("haneczka"), "Andrzej", "Buśko", 603787609, new HashSet<>());
-        user.getRolesSet().add(new Role(2,"ROLE_USER"));
+        roleRepository.save(adminRole);
+        roleRepository.save(userRole);
+
+        User admin = new User("andrzejbusko610@gmail.com", passwordEncoder().encode("haneczka"), "Andrzej", "Buśko", 603787609);
+        User user = new User("busko610@gmail.com", passwordEncoder().encode("haneczka"), "Andrzej", "Buśko", 603787609);
+
+        admin.addRole(roleRepository.getById(1));
+        admin.addRole(roleRepository.getById(2));
         userService.add(admin);
+        user.addRole(roleRepository.getById(2));
         userService.add(user);
+
+
+        Ingredient tomatoSous = new Ingredient("sos pomidorowy");
+        Ingredient cheese = new Ingredient("ser");
+
+        Pizza margarita = new Pizza("margarita");
+        margarita.addIngredient(tomatoSous);
+        margarita.addIngredient(cheese);
+
+
+        pizzaRepository.save(margarita);
+
     }
 
 }

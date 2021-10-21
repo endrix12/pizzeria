@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en", xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rejestracja</title>
+</head>
+<body>
+<h1 th:if="${newPizza.id == null}">Dodanie pizzy</h1>
+<h1 th:unless="${newPizza.id == null}">Edycja pizzy</h1>
+<div>
+    <form th:action="@{/add}" method="post"  th:object="${newPizza}" >
+        <input id="id" type="hidden" th:field="*{id}"/>
+        <label for="name">Podaj nazwę pizzy</label></br>
+        <input id="name" name="name" type="text" th:field="*{name}"/>&nbsp&nbsp<span style="color: red" th:if="${pizzaExists}" >Nazwa jest zajęta</span></br>
+        <label for="priceForSMALL">priceForSMALL</label></br>
+        <input id="priceForSMALL" name="priceForSMALL" type="number" step="0.01" min="0" th:field="*{priceForSMALL}"/></br>
+        <label for="priceForMEDIUM">priceForMEDIUM</label></br>
+        <input id="priceForMEDIUM" name="priceForMEDIUM" type="number" step="0.01" min="0"  th:field="*{priceForMEDIUM}"/></br>
+        <label for="priceForBIG">priceForBIG</label></br>
+        <input id="priceForBIG" name="priceForBIG" type="number" step="0.01" min="0"  th:field="*{priceForBIG}"/> </br>
+
+        <input th:if="${newPizza.id==null}" type="submit" value="Dodaj pizze"/>
+        <input th:unless="${newPizza.id==null}" type="submit" value="Zapisz zmiany"/>
+    </form>
+</div>
+</body>
+</html>
